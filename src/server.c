@@ -5,9 +5,13 @@
 #include <unistd.h>          // UNIX system calls (read, write, close, ...)
 #include <arpa/inet.h>       // Network functions (sockaddr_in, htons, inet_addr, ...)
 #include <pthread.h>         // POSIX threads for multithreading
+#include <signal.h>          // Signal handling (graceful shutdown on Ctrl+C)
+
 
 #define BUFFER_SIZE 4096     // Constant buffer size for reads & writes
 
+// Global server socket descriptor so it can be closed from signal handler
+int server_fd = -1;         
 
 /**
  * Thread worker function to handle a client connection.
@@ -62,6 +66,7 @@ void start_server(int port) {
     }
 
     printf("Server listening on port %d...\n", port);   // Server ready message
+    signal(SIGINT, handle_sigint);                      // Register SIGINT handler (Ctrl+C)
 
     while (1) {
         client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_len);
@@ -128,4 +133,21 @@ void handle_client(int client_socket) {
     }
 
     fclose(fp);                                        // Close file after sending
+}
+
+/**
+ * Signal handler for graceful shutdown.
+ *
+ * Closes the server socket if open and exits the program cleanly.
+ *
+ * @param sig The signal number received (e.g., SIGINT).
+ */
+void handle_sigint(int sig) {
+    printf("\n[!] Caught SIGINT (Ctrl+C). Shutting down server gracefully...\n");
+
+    if (server_fd >= 0) {
+        close(server_fd);   // Close the listening socket
+    }
+
+    exit(0);  // Exit cleanly
 }
