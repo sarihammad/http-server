@@ -10,6 +10,8 @@
 
 #define BUFFER_SIZE 4096     // Constant buffer size for reads & writes
 
+void handle_sigint(int sig);  // Forward declaration for the signal handler
+
 // Global server socket descriptor so it can be closed from signal handler
 int server_fd = -1;         
 
@@ -143,6 +145,8 @@ void handle_client(int client_socket) {
  * @param sig The signal number received (e.g., SIGINT).
  */
 void handle_sigint(int sig) {
+    (void)sig;  // Mark as intentionally unused
+
     printf("\n[!] Caught SIGINT (Ctrl+C). Shutting down server gracefully...\n");
 
     if (server_fd >= 0) {
