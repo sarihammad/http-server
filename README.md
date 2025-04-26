@@ -1,16 +1,10 @@
 # HTTP Server
 
-A lightweight multithreaded HTTP server written in C. Serves static files from a public directory and handles HTTP/1.0 GET requests.
-
-## Features
-
-- Serves static files (HTML, CSS, JS)
-- Handles multiple clients via multithreading using pthread
-- Implements graceful shutdowns with signals
+Multithreaded HTTP server.
 
 ## Getting Started
 
-### Clone the Repository
+### Clone the Repo
 
 ```bash
 git clone https://github.com/sarihammad/http-server.git
@@ -23,9 +17,7 @@ cd http-server
 make
 ```
 
-This compiles the server and produces a server binary in the project root.
-
-### Test the Server
+### Run the Server
 
 1. Run the server:
 
@@ -34,11 +26,10 @@ This compiles the server and produces a server binary in the project root.
 ```
 
 2. In another terminal, test with curl:
+
 ```bash
 curl http://localhost:8080/
 ```
-
-Expected Output:
 
 ```html
 <!-- public/index.html -->
